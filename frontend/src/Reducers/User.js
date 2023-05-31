@@ -51,18 +51,7 @@ export const userReducer=createReducer(initialState,{
 
     
 
-      UpdatePasswordRequest:(state,action)=>{
-        state.loading=true
-     },
-      UpdatePasswordSuccess:(state,action)=>{
-        state.loading=false
-        state.message=action.payload
-     },
-      UpdatePasswordFailure:(state,action)=>{
-        state.loading=false
-        state.error=action.payload
-     },
-
+    
    // for loading user data 
      LoadUserRequest:(state,action)=>{
         state.loading=true;
@@ -78,19 +67,7 @@ export const userReducer=createReducer(initialState,{
         state.isAuthenticate=false
      },
 
-      // for delete profile
-      deleteProfileRequest:(state)=>{
-        state.loading=true
-      },
-      deleteProfileSuccess:(state,action)=>{
-        state.loading=false;
-        state.message=action.payload;
-        state.isAuthenticate=false
-      },
-      deleteProfileFailure:(state,action)=>{
-        state.loading=false;
-        state.error=action.payload;
-      },
+     
 })
 
 export const postOfFollowingReducer=createReducer(initialState,{

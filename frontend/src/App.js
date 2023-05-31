@@ -11,6 +11,9 @@ import Newpost from './Components/Newpost/Newpost';
 import Register from './Components/Register/Register';
 import UpdateProfile from './Components/UpdateProfile/UpdateProfile';
 import UpdatePassword from './Components/UpdatePassword/UpdatePassword';
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
+import ResetPassword from './Components/ResetPassword/ResetPassword';
+import UserProfile from './Components/UserProfile/UserProfile';
 
 function App() {
   const {isAuthenticate}=useSelector(state=>state.user);
@@ -29,6 +32,9 @@ function App() {
              <Route path="/register" element={isAuthenticate?<Account/>:<Register/>} />
              <Route path="/update/profile" element={isAuthenticate?<UpdateProfile/>:<Login/>} />
              <Route path="/update/password" element={isAuthenticate?<UpdatePassword/>:<Login/>} />
+             <Route path="/forgot/password/" element={isAuthenticate?<UpdatePassword/>:<ForgotPassword/>}/>
+             <Route path="/password/reset/:token" element={isAuthenticate?<UpdatePassword/>:<ResetPassword/>}/>
+             <Route path="/user/:id" element={isAuthenticate?<UserProfile/>:<Login/>}/>
         </Routes>
     </Router>
   );

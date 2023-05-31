@@ -7,7 +7,7 @@ import { updatePassword } from '../../Actions/Users';
 
 const UpdatePassword = () => {
 
-   const {loading,error,message}=useSelector(state=>state.user)
+   const {loading,error,message}=useSelector(state=>state.like)
    const [oldPassword, setOldPassword] = useState('');
    const [newPassword, setNewPassword] = useState('');
    const dispatch = useDispatch();
@@ -30,12 +30,12 @@ const UpdatePassword = () => {
         if(message){
             alert.success(message)
             dispatch({
-                type:'clearErrors'
+                type:'clearMessage'
             })
             setOldPassword('')
             setNewPassword('')
         }
-   }, [loading,error,message])
+   }, [loading,error,message,alert])
    
 
   return (

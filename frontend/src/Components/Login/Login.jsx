@@ -12,12 +12,12 @@ const Login = () => {
     const dispatch = useDispatch();
     const alert=useAlert();
 
-    const {error}=useSelector(state=>state.user)
-    const {message}=useSelector(state=>state.like)
+    const {error,message}=useSelector(state=>state.user)
+    const {message:logOutMessage}=useSelector(state=>state.like)
 
     const loginHandler = async(e) => {
         e.preventDefault();
-        await dispatch(loginUser(mail, password));
+        dispatch(loginUser(mail, password));
         setEmail('');
         setPassword('');
     }
@@ -29,13 +29,14 @@ const Login = () => {
               type:'clearErrors'
             })
         }
-        if(message){
-            alert.success(message)
+    
+        if(logOutMessage){
+            alert.success(logOutMessage)
             dispatch({
-                type:'clearErrors'
+                type:'clearMessage'
             })
         }
-    }, [error,alert,dispatch,message])
+    }, [error,alert,dispatch,message,logOutMessage])
     
     return (
         <div className='login'>
@@ -43,7 +44,7 @@ const Login = () => {
                 <Typography variant='h4' style={{ padding: '2vmax', color: 'rgb(82, 83, 82)' }}>Social Media</Typography>
                 <input type="email" placeholder='Email' value={mail} required onChange={(e) => { setEmail(e.target.value) }} />
                 <input type="password" placeholder='Password' value={password} onChange={(e) => { setPassword(e.target.value) }} required />
-                <Link to="forgot/password">
+                <Link to="/forgot/password">
                     <Typography>Forgot password?</Typography>
                 </Link>
                 <Button type="submit">login</Button>

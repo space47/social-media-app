@@ -1,39 +1,36 @@
-import React,{useEffect, useState} from 'react';
-import './Account.css';
-import '../Post/Post.css';
-import {useDispatch, useSelector} from 'react-redux';
-import { LogOutUser, allUsers, deleteProfile, loadUser, myAllPosts, postOfFollowing } from '../../Actions/Users';
-import Loader from '../Loader/Loader';
-import Post from '../Post/Post';
 import { Avatar, Button, Dialog, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom';
+import Post from '../Post/Post';
+import Loader from '../Loader/Loader';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { Link } from 'react-router-dom';
 import User from '../User/User';
+import { getUserProfile} from '../../Actions/Users';
 
-const Account = () => {
-
+const UserProfile = () => {
   const dispatch=useDispatch();
   const alert=useAlert();
 
   const {user,loading:userloading}=useSelector(state=>state.user);
+  const {userProfile,loading:userProfileloading}=useSelector(state=>state.like);
   const {loading,error,posts}=useSelector(state=>state.myPost);
   const {error:likeError,message,loading: deleteLoading,}=useSelector(state=>state.like);
   const [followersToggle,setFollowersToggle]=useState(false);
   const [followingToggle,setFollowingToggle]=useState(false);
- 
-  const logOutHandler=async()=>{
-       await dispatch(LogOutUser());
-       alert.success("Logged Out Successfully");
-  }
+  const [following,setFollowing]=useState(false);
+  const [isProfile,setIsProfile]=useState(false);
+  
+  const params=useParams();
+  console.log(userProfile)
 
-  const deleteHandler=async()=>{
-       await dispatch(deleteProfile())
-       dispatch(LogOutUser());
-  }
-   
-    useEffect(() => {
-           dispatch(myAllPosts());
-     }, [dispatch])
+  useEffect(() => {
+      if(user._id===params.id){
+           setIsProfile(true)
+      }
+      dispatch(getUserProfile(params.id))
+  }, [dispatch,user.id,params.id])
+    
 
     useEffect(() => {
          if(error){
@@ -80,8 +77,8 @@ const Account = () => {
                   }
               </div>
               <div className='accountright'>
-                   <Avatar src={user.avatar.url}  sx={{height:"7vmax",width:"7vmax"}} />
-                   <Typography variant="h6" marginTop={"1vmax"} color={'#3B3B3B'} marginBottom={"2vmax"}>{user.name}</Typography>
+                   <Avatar src={userProfile.avatar.url}  sx={{height:"7vmax",width:"7vmax"}} marginTop={"2vmax"}/>
+                   <Typography variant="h6" marginTop={"1vmax"} color={'#3B3B3B'} marginBottom={"2vmax"}>{userProfile.name}</Typography>
                    <div className='a'>
                       <button onClick={()=>setFollowingToggle(!followingToggle)}>Following {user.following.length}</button>
                    </div>
@@ -89,13 +86,13 @@ const Account = () => {
                       <button onClick={()=>setFollowersToggle(!followersToggle)}>Followers {user.followers.length}</button>
                    </div>
                     <div className='a'>
-                       Posts {user.posts.length}
+                       Posts {userProfile.posts.length}
                    </div>
-                   <Button variant="contained"  onClick={logOutHandler}>logOut</Button>
-
-                   <Link to="/update/profile">Edit Profile</Link>
-                   <Link to="/update/password">Change Password</Link>
-                   <Button disabled={deleteLoading} style={{color:"red",marginTop:"1vmax"}} onClick={deleteHandler}>Delete My Profile</Button>
+                  {
+                    isProfile?null: <Button variant="contained" onClick={()=>setFollowing(!following)} style={{backgroundColor:following?"red":""}}>{
+                       following?"UnFollow":"Follow"
+                   }</Button>
+                  }
 
                     {/* DialogBox for followers */}
                     <Dialog open={followersToggle} onClose={() => { setFollowersToggle(!followersToggle) }}>
@@ -116,7 +113,7 @@ const Account = () => {
                     {
                          user && user.following.length>0?user.following.map((follow)=>(
                               <User key={follow._id} name={follow.name} avatar={follow.avatar.url} userId={follow._id} />
-                         )):<Typography style={{margin:'2vmax'}}>No Following present</Typography>
+                         )):<Typography style={{margin:'2vmax'}}>User has not made any posts</Typography>
                     }
                 </div>
             </Dialog>
@@ -126,4 +123,4 @@ const Account = () => {
   )
 }
 
-export default Account;
+export default UserProfile

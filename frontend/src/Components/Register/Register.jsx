@@ -8,12 +8,14 @@ import { useAlert } from 'react-alert';
 
 const Register = () => {
     const dispatch = useDispatch();
-    const {loading, message,error } = useSelector(state => state.user);
+    const {loading} = useSelector(state => state.user);
+    const {message:deleteMessage,error:deleteError} = useSelector(state => state.like);
     const [namee, setName] = useState("");
     const [mail, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [avatar, setAvatar] = useState("");
     const alert = useAlert();
+    
 
     const imageHandler = (e) => {
         const file = e.target.files[0];
@@ -34,14 +36,14 @@ const Register = () => {
     }
 
     useEffect(() => {
-        if (error) {
-            alert.error(error)
-            dispatch({
-                type: 'clearErrors'
-            })
-        }
+       if(deleteMessage){
+        alert.success(deleteMessage)
+        dispatch({
+            type:'clearMessage'
+        })
+       }
        
-    }, [dispatch,alert, error])
+    }, [dispatch,alert,deleteError, deleteMessage])
 
     return (
         <div className='register'>

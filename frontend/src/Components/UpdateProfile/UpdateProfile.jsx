@@ -8,7 +8,7 @@ import { Avatar, Button} from '@mui/material';
 const UpdateProfile = () => {
 
     const dispatch = useDispatch();
-    const{loading,user,error}=useSelector(state=>state.user)
+    const{loading,error,user}=useSelector(state=>state.user)
     const { loading:updateLoading, error:updateError, message } = useSelector(state => state.like)
     const [name, setOldName] = useState(user.name)
     const [mail, setOldEmail] = useState(user.email)
@@ -33,7 +33,7 @@ const UpdateProfile = () => {
     const submitHandler = async(e) => {
         e.preventDefault();
         await dispatch(updateProfile(name, mail, avatar))
-        await dispatch(loadUser())
+        dispatch(loadUser())
     }
 
     useEffect(() => {
@@ -54,10 +54,10 @@ const UpdateProfile = () => {
         if(message){
             alert.success(message)
             dispatch({
-                type: 'clearErrors'
+                type: 'clearMessage'
             })
         }
-    }, [dispatch,error,message])
+    }, [dispatch,error,message,updateError,alert])
 
   return (
     <div className='update'>

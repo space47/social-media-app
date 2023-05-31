@@ -5,7 +5,7 @@ const initialState={
 }
 
 export const likesReducer=createReducer(initialState,{
-      likeRequest:(state,action)=>{
+      likeRequest:(state)=>{
         state.loading=true
       },
       likeSuccess:(state,action)=>{
@@ -56,6 +56,48 @@ export const likesReducer=createReducer(initialState,{
         state.error=action.payload;
       },
 
+       // for delete profile
+      deleteProfileRequest:(state)=>{
+        state.loading=true
+      },
+      deleteProfileSuccess:(state,action)=>{
+        state.loading=false;
+        state.message=action.payload;
+        state.isAuthenticate=false
+      },
+      deleteProfileFailure:(state,action)=>{
+        state.loading=false;
+        state.error=action.payload;
+      },
+
+      // forgot password 
+      forgotPasswordRequest:(state)=>{
+        state.loading=true
+      },
+      forgotPasswordSuccess:(state,action)=>{
+        state.loading=false;
+        state.message=action.payload;
+      },
+      forgotPasswordFailure:(state,action)=>{
+        state.loading=false;
+        state.error=action.payload;
+      },
+
+      
+      // reset password 
+      resetPasswordRequest:(state)=>{
+        state.loading=true
+      },
+      resetPasswordSuccess:(state,action)=>{
+        state.loading=false;
+        state.message=action.payload;
+      },
+      resetPasswordFailure:(state,action)=>{
+        state.loading=false;
+        state.error=action.payload;
+      },
+
+
       // for New Post
      newPostRequest:(state)=>{
         state.loading=true
@@ -91,6 +133,31 @@ export const likesReducer=createReducer(initialState,{
         state.message=action.payload
      },
      UpdateFailure:(state,action)=>{
+        state.loading=false
+        state.error=action.payload
+     },
+
+    //  Update password
+      UpdatePasswordRequest:(state,action)=>{
+        state.loading=true
+     },
+      UpdatePasswordSuccess:(state,action)=>{
+        state.loading=false
+        state.message=action.payload
+     },
+      UpdatePasswordFailure:(state,action)=>{
+        state.loading=false
+        state.error=action.payload
+     },
+ 
+     getUserRequest:(state)=>{
+        state.loading=true
+     },
+     getUserSuccess:(state,action)=>{
+        state.loading=false
+        state.user=action.payload
+     },
+     getuserFailure:(state,action)=>{
         state.loading=false
         state.error=action.payload
      },

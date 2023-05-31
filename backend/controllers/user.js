@@ -26,7 +26,7 @@ exports.register=async(req,res)=>{
             expires:new Date(Date.now()+90*24*60*60*1000),
             httpOnly:true
          }
-
+       
         res.status(201).cookie("token",token,options).json({
             success:true,
             user,
@@ -47,7 +47,7 @@ exports.login= async(req,res)=>{
          const user=await User.findOne({email}).select("+password").populate("posts followers following");
 
          if(!user){
-            res.status(400).json({
+            return res.status(400).json({
                 success:false,
                 message:"User does not exist"
             })
@@ -56,7 +56,7 @@ exports.login= async(req,res)=>{
          const isMatch=await user.matchPassword(password);
 
          if(!isMatch){
-             res.status(500).json({
+            return res.status(400).json({
                 success:false,
                 message:"Password not matched"
              })
@@ -232,9 +232,11 @@ exports.deleteMyProfile=async(req,res)=>{
        const following=user.following;
        const user_id=user._id;
 
+    
     // Deleting from all the post   
        for(let i=0;i<post.length;i++){
           const postone=await Post.findById(post[i]);
+          await cloudinary.v2.uploader.destroy(postone.imageUrl.public_id) 
           await postone.deleteOne();
        }
 
@@ -255,6 +257,8 @@ exports.deleteMyProfile=async(req,res)=>{
           await follows.save();
        }
 
+       // removing from cloudinary
+       await cloudinary.v2.uploader.destroy(user.avatar.public_id)   
 
        await user.deleteOne();
        res.cookie("token",null,{expires:new Date(Date.now()),httpOnly:true});
@@ -294,6 +298,8 @@ exports.getUserProfile=async(req,res)=>{
             
         const user=await User.findById(req.params.id).populate("posts followers following");
 
+        console.log("lsdhfjshfls",user)
+
         if(!user){
             res.status(404).json({
             success:true,
@@ -309,7 +315,7 @@ exports.getUserProfile=async(req,res)=>{
       } catch (error) {
            res.status(500).json({
             success:true,
-            message:error.message
+            message:"Please Login First"
            })
       }
 }
@@ -344,7 +350,7 @@ exports.forgotPassword=async(req,res)=>{
        const user=await User.findOne({email:req.body.email});
        
        if(!user){
-            res.status(404).json({
+            return res.status(404).json({
                 success:false,
                 message:"User not found"
             })
@@ -354,7 +360,7 @@ exports.forgotPassword=async(req,res)=>{
 
        await user.save();
 
-       const resetUrl=`${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetPasswordToken}`;
+       const resetUrl=`${req.protocol}://${req.get("host")}/password/reset/${resetPasswordToken}`;
 
        const message = `Please reset your URL using the link below ${resetUrl}`;
 

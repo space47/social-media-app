@@ -35,10 +35,10 @@ export const registerUser=(name,email,password,avatar)=>async(dispatch)=>{
                "Content-Type":"application/json"
             }
          })
-         console.log(data)
+         
          dispatch({
             type:'RegisterSuccess',
-            payload:data.message
+            payload:data.user
          })
      } catch (error) {
          dispatch({
@@ -63,7 +63,7 @@ export const loadUser=()=>async (dispatch)=>{
       }catch(error){
             dispatch({
             type:'LoadUserFailure',
-            payload:error.message
+            payload:""
          })
       }
 }
@@ -218,6 +218,85 @@ export const deleteProfile=()=>async(dispatch)=>{
    } catch (error) {
       dispatch({
          type:'deleteProfileFailure',
+         payload:error.response.data.message
+      })
+   }
+}
+
+// forgot password
+export const forgotPassword=(email)=>async(dispatch)=>{
+     try {
+         dispatch({
+            type:'forgotPasswordRequest'
+         })
+
+         const {data}=await axios.post('/api/v1/forgot/password',{
+            email
+         },{
+            headers:{
+               "Content-Type":"application/json",
+            }
+         })
+
+         dispatch({
+            type:'forgotPasswordSuccess',
+            payload:data.message
+         })
+     } catch (error) {
+         dispatch({
+            type:'forgotPasswordFailure',
+            payload:error.response.data.message
+         })
+     }
+}
+
+// Reset password
+export const resetPassword=(token,password)=>async(dispatch)=>{
+     try {
+         dispatch({
+            type:'resetPasswordRequest'
+         })
+
+         const {data}=await axios.put(`/api/v1/password/reset/${token}`,{
+            password
+         },{
+            headers:{
+               "Content-Type":"application/json"
+            }
+         })
+
+         dispatch({
+            type:'resetPasswordSuccess',
+            payload:data.message
+         })
+     } catch (error) {
+         dispatch({
+            type:'resetPasswordFailure',
+            payload:error.response.data.message
+         })
+     }
+}
+
+// get User Profile
+export const getUserProfile=(id)=>async(dispatch)=>{
+   try {
+      console.log("idharrr")
+     dispatch({
+        type:'getUserRequest'
+     })
+     
+   const data= await axios.get(`/api/v1/user/${id}`)
+
+   console.log(data)
+
+     dispatch({
+      type:'getUserSuccess',
+      payload:data
+     })
+
+   } catch (error) {
+      dispatch({
+         type:'getuserFailure',
          payload:error.response.data.message
       })
    }

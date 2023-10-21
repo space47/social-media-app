@@ -1,32 +1,49 @@
-const express=require('express');
-const router=express.Router();
-const {register,login,UserFollow,logOut,updatePassword,updateProfile, deleteMyProfile,myProfile, getUserProfile, getAllUsers,forgotPassword, resetPassword, getMyAllPost}=require('../controllers/user');
-const {isAuthenticated} = require('../middleware/auth');
+const express = require("express");
+const router = express.Router();
+const {
+  register,
+  login,
+  UserFollow,
+  logOut,
+  updatePassword,
+  updateProfile,
+  deleteMyProfile,
+  myProfile,
+  getUserProfile,
+  getAllUsers,
+  forgotPassword,
+  resetPassword,
+  getMyAllPost,
+  getUserPosts,
+} = require("../controllers/user");
+const { isAuthenticated } = require("../middleware/auth");
 
 router.route("/register").post(register);
 
-router.route('/login').post(login);
+router.route("/login").post(login);
 
 router.route("/logout").get(logOut);
 
-router.route('/follow/:id').get(isAuthenticated,UserFollow);
+router.route("/follow/:id").get(isAuthenticated, UserFollow);
 
-router.route('/update/password').put(isAuthenticated,updatePassword);
+router.route("/update/password").put(isAuthenticated, updatePassword);
 
-router.route('/update/profile').put(isAuthenticated,updateProfile);
+router.route("/update/profile").put(isAuthenticated, updateProfile);
 
-router.route('/delete/me').delete(isAuthenticated,deleteMyProfile);
+router.route("/delete/me").delete(isAuthenticated, deleteMyProfile);
 
-router.route('/myProfile').get(isAuthenticated,myProfile);
+router.route("/myProfile").get(isAuthenticated, myProfile);
 
-router.route('/user/:id').get(isAuthenticated,getUserProfile);
+router.route("/my/post").get(isAuthenticated, getMyAllPost);
 
-router.route('/my/post').get(isAuthenticated,getMyAllPost);
+router.route("/user/:id").get(isAuthenticated, getUserProfile);
 
-router.route('/users').get(isAuthenticated,getAllUsers);
+router.route("/userpost/:id").get(isAuthenticated, getUserPosts);
 
-router.route('/forgot/password').post(forgotPassword);
+router.route("/users").get(isAuthenticated, getAllUsers);
 
-router.route('/password/reset/:token').put(resetPassword);
+router.route("/forgot/password").post(forgotPassword);
 
-module.exports=router;
+router.route("/password/reset/:token").put(resetPassword);
+
+module.exports = router;

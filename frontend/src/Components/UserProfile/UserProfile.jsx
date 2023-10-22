@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react';
 import '../Post/Post.css';
 import {useDispatch, useSelector} from 'react-redux';
-import { getUserPosts, getUserProfile} from '../../Actions/Users';
+import { followandUnfollow, getUserPosts, getUserProfile} from '../../Actions/Users';
 import Loader from '../Loader/Loader';
 import Post from '../Post/Post';
 import { Avatar, Button, Dialog, Typography } from '@mui/material';
@@ -14,10 +14,10 @@ const Account = () => {
   const dispatch=useDispatch();
   const alert=useAlert();
 
-  const {user}=useSelector(state=>state.userProfile);
+  const {user,loading:userLoading,error:userError}=useSelector(state=>state.userProfile);
   const {user:me,loading:userloading}=useSelector(state=>state.user);
   const {loading,error,posts}=useSelector(state=>state.userPosts);
-  const {error:likeError,message,loading: deleteLoading,}=useSelector(state=>state.like);
+  const {message,error:followError,loading: followLoading,}=useSelector(state=>state.like);
   const [followersToggle,setFollowersToggle]=useState(false);
   const [followingToggle,setFollowingToggle]=useState(false);
   const [following,setFollowing]=useState(false);
@@ -27,17 +27,32 @@ const Account = () => {
 
   const followHandler=async()=>{
     setFollowing(!following);
+    dispatch(followandUnfollow(user._id));
   }
    
     useEffect(() => {
            dispatch(getUserPosts(param.id));
-           dispatch(getUserProfile(param.id))
+           dispatch(getUserProfile(param.id));
            if(me._id===param.id){
               setmyProfile(true);
            }else{
               setmyProfile(false);
            }
      }, [dispatch,param.id,me._id])
+
+     useEffect(()=>{
+      if(user){
+        user.followers.forEach((follower)=>{
+          if(follower._id===me._id){
+             setFollowing(true);
+             dispatch(getUserProfile(param.id));
+             return;
+          }   else{
+             setFollowing(false);
+          }
+        })
+      }
+     },[dispatch,me._id,param.id,user,following])
 
     useEffect(() => {
          if(error){
@@ -46,11 +61,17 @@ const Account = () => {
              type:"clearErrors"
           })
          }
-         if(likeError){
-            alert.error(likeError)
+         if(followError){
+            alert.error(followError)
             dispatch({
                 type:'clearErrors'
             })
+         }
+         if(userError){
+          alert.error(userError)
+          dispatch({
+            type:'clearErrors'
+          })
          }
          if(message){
             alert.success(message)
@@ -59,7 +80,7 @@ const Account = () => {
             })
          }
     
-    }, [alert,error,likeError,message,dispatch])
+    }, [alert,error,followError,message,dispatch,userError])
   
   return (
       loading===true || userloading===true?<Loader/>:(
@@ -99,7 +120,7 @@ const Account = () => {
                        Posts {user.posts.length}
                    </div>
 
-                   {myProfile? null:<Button variant="contained" onClick={followHandler} style={{background:following?'red':'blue'}}>{following?'Unfollow':'Follow'}</Button>}
+                   {myProfile? null:<Button variant="contained" onClick={followHandler} style={{background:following?'red':'blue'}} disabled={followLoading}>{following?'Unfollow':'Follow'}</Button>}
               
                    {/* <Button disabled={deleteLoading} style={{color:"red",marginTop:"1vmax"}} onClick={deleteHandler}>Delete My Profile</Button> */}
 

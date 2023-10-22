@@ -146,15 +146,14 @@ export const likesReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
-  getUserRequest: (state) => {
+  followandUnfollowUserRequest: (state) => {
     state.loading = true;
   },
-  getUserSuccess: (state, action) => {
+  followandUnfollowUserSuccess: (state, action) => {
     state.loading = false;
-    state.user = action.payload;
+    state.message = action.payload;
   },
-  getuserFailure: (state, action) => {
-    state.loading = false;
+  followandUnfollowUserFailure: (state, action) => {
     state.error = action.payload;
   },
 

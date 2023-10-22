@@ -234,6 +234,7 @@ exports.deleteMyProfile = async (req, res) => {
     const followers = user.followers;
     const following = user.following;
     const user_id = user._id;
+    const allPosts = await Post.find();
 
     // Deleting from all the post
     for (let i = 0; i < post.length; i++) {
@@ -242,7 +243,7 @@ exports.deleteMyProfile = async (req, res) => {
       await postone.deleteOne();
     }
 
-    // Deleting from all the user
+    // Deleting from followers following all the user
     for (let i = 0; i < followers.length; i++) {
       const follower = await User.findById(followers[i]);
 
@@ -251,12 +252,35 @@ exports.deleteMyProfile = async (req, res) => {
       await follower.save();
     }
 
+    // Deleting from following follower all the user
     for (let i = 0; i < following.length; i++) {
       const follows = await User.findById(following[i]);
 
       const index = follows.followers.indexOf(user_id);
       follows.followers.splice(index, 1);
       await follows.save();
+    }
+
+    // Deleting from all users comments
+    for (let i = 0; i < allPosts.length; i++) {
+      const post = await Post.findById(allPosts[i]._id);
+      for (let j = 0; j < post.comments.length; j++) {
+        if (post.comments[j].user === user_id) {
+          post.comments.splice(j, 1);
+        }
+      }
+      await post.save();
+    }
+
+    // Deleting from all users likes
+    for (let i = 0; i < allPosts.length; i++) {
+      const post = await Post.findById(allPosts[i]._id);
+      for (let j = 0; j < post.likes.length; j++) {
+        if (post.likes[j] === user_id) {
+          post.likes.splice(j, 1);
+        }
+      }
+      await post.save();
     }
 
     // removing from cloudinary

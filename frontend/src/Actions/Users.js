@@ -318,15 +318,37 @@ export const getUserProfile = (id) => async (dispatch) => {
       type: "userProfileRequest",
     });
 
-    const data = await axios.get(`/api/v1/user/${id}`);
+    const { data } = await axios.get(`/api/v1/user/${id}`);
 
     dispatch({
       type: "userProfileSuccess",
-      payload: data.data.user,
+      payload: data.user,
     });
   } catch (error) {
     dispatch({
       type: "userProfileFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// follow and unfollow
+export const followandUnfollow = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "followandUnfollowUserRequest",
+    });
+
+    const { data } = await axios.get(`/api/v1/follow/${id}`);
+    console.log("hit", data);
+
+    dispatch({
+      type: "followandUnfollowUserSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "followandUnfollowUserFailure",
       payload: error.response.data.message,
     });
   }

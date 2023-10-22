@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './Post.css';
 import { Typography, Avatar, Button, Dialog } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { MoreVert, FavoriteBorder, Favorite, ChatBubbleOutline, DeleteOutline } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { commentOnPost, deletePost, likePost, updateCaption } from '../../Actions/Post';
-import { loadUser, myAllPosts, postOfFollowing } from '../../Actions/Users';
+import { getUserPosts, loadUser, myAllPosts, postOfFollowing } from '../../Actions/Users';
 import User from '../User/User';
 import CommentCard from '../CommentCard/CommentCard';
 
@@ -30,12 +30,14 @@ const Post = ({
     const [captionValue, setCaptionValue] = useState("");
     const [captionToggle, setCaptionToggle] = useState(false);
     const { user } = useSelector(state => state.user);
+    const param=useParams()
 
     const handleLike = async (e) => {
-        setLiked(!liked)
+        setLiked(!liked);
         await dispatch(likePost(postId));
         if (isAccount) {
             dispatch(myAllPosts())
+            dispatch(getUserPosts(param.id))
         } else {
             dispatch(myAllPosts())
             dispatch(postOfFollowing());
@@ -103,7 +105,7 @@ const Post = ({
                     <ChatBubbleOutline onClick={() => { setCommentToggle(!commentToggle) }} />
                 </Button>
                 {
-                    isDelete ? <Button onClick={postDeleteHandler}>
+                    isDelete && isAccount ? <Button onClick={postDeleteHandler}>
                         <DeleteOutline />
                     </Button> : null
                 }

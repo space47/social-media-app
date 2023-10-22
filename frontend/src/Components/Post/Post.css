@@ -27,6 +27,7 @@
 .postDetails {
   display: flex;
   padding: 1vmax;
+  align-items: center;
 }
 
 .postDetails > a {

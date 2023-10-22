@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
+import './Loader.css'
 
 const Loader = () => {
   return (
-    <div>Loader</div>
+    <div className="loadingPage">
+    <div className="loadingCircle"></div>
+  </div>
   )
 }
 

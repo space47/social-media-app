@@ -1,18 +1,22 @@
 .account {
-  min-height: 100vh;
+  /* min-height: 100vh; */
+  height: 93.8vh;
   display: grid;
   grid-template-columns: 1fr 300px;
   background-image: linear-gradient(to right, #fff5bc, #cec1ff);
 }
 
 .accountLeft {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto;
   /* flex-wrap: wrap; */
 }
 
 .accountright {
+  height: 100%;
   padding-top: 2vmax;
   overflow-y: auto;
   border-left: 1px solid rgba(204, 203, 203, 0.342);
@@ -54,13 +58,17 @@
 }
 
 a {
-  margin-top: 1vmax;
+  /* margin-top: 1vmax; */
   text-decoration: none;
   padding: 0.5vmax;
   background-color: transparent;
   color: #3b3b3b;
   font-family: "Roboto";
   font-size: 1vmax;
+}
+
+.mt{
+  margin-top: 1vmax;
 }
 
 a:hover {

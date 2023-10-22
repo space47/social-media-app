@@ -14,7 +14,7 @@ const Account = () => {
   const dispatch=useDispatch();
   const alert=useAlert();
 
-  const {user,loading:userLoading,error:userError}=useSelector(state=>state.userProfile);
+  const {user,error:userError}=useSelector(state=>state.userProfile);
   const {user:me,loading:userloading}=useSelector(state=>state.user);
   const {loading,error,posts}=useSelector(state=>state.userPosts);
   const {message,error:followError,loading: followLoading,}=useSelector(state=>state.like);
@@ -45,10 +45,12 @@ const Account = () => {
         user.followers.forEach((follower)=>{
           if(follower._id===me._id){
              setFollowing(true);
-             dispatch(getUserProfile(param.id));
+             dispatch(getUserPosts(param.id));
+            //  dispatch(getUserProfile(param.id));
              return;
           }   else{
              setFollowing(false);
+             dispatch(getUserPosts(param.id));
           }
         })
       }
@@ -73,6 +75,7 @@ const Account = () => {
             type:'clearErrors'
           })
          }
+         
          if(message){
             alert.success(message)
             dispatch({

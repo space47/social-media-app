@@ -349,7 +349,10 @@ exports.getUserProfile = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const user = await User.find({});
+    const name = req.query.name;
+    const user = await User.find({
+      name: { $regex: req.query.name, $options: "i" },
+    });
 
     if (!user) {
       res.status(404).json({

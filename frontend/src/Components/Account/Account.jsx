@@ -93,7 +93,7 @@ const Account = () => {
                    </div>
                    <Button variant="contained"  onClick={logOutHandler}>logOut</Button>
 
-                   <Link to="/update/profile">Edit Profile</Link>
+                   <Link to="/update/profile" className='mt'>Edit Profile</Link>
                    <Link to="/update/password">Change Password</Link>
                    <Button disabled={deleteLoading} style={{color:"red",marginTop:"1vmax"}} onClick={deleteHandler}>Delete My Profile</Button>
 

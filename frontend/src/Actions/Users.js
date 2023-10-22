@@ -96,25 +96,27 @@ export const postOfFollowing = () => async (dispatch) => {
   }
 };
 
-export const allUsers = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: "allUsersRequest",
-    });
+export const allUsers =
+  (name = "") =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: "allUsersRequest",
+      });
 
-    const { data } = await axios.get("/api/v1/users");
+      const { data } = await axios.get(`/api/v1/users?name=${name}`);
 
-    dispatch({
-      type: "allUsersSuccess",
-      payload: data.user,
-    });
-  } catch (error) {
-    dispatch({
-      type: "allUsersFailure",
-      payload: error.response.data.message,
-    });
-  }
-};
+      dispatch({
+        type: "allUsersSuccess",
+        payload: data.user,
+      });
+    } catch (error) {
+      dispatch({
+        type: "allUsersFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // for getting own posts
 export const myAllPosts = () => async (dispatch) => {

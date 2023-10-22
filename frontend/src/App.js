@@ -14,7 +14,8 @@ import UpdatePassword from "./Components/UpdatePassword/UpdatePassword";
 import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword/ResetPassword";
 import UserProfile from "./Components/UserProfile/UserProfile";
-import { Search } from "@mui/icons-material";
+import Search from "./Components/Search/Search";
+import NotFound from "./Components/NotFound/NotFound";
 
 function App() {
   const { isAuthenticate } = useSelector((state) => state.user);
@@ -61,9 +62,11 @@ function App() {
           element={isAuthenticate ? <UserProfile /> : <Login />}
         />
         <Route
-          path="search"
+          path="/search"
           element={isAuthenticate ? <Search /> : <Login />}
         />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

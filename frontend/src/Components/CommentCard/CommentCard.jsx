@@ -24,7 +24,6 @@ const CommentCard = ({
   const deleteCommentHandler=()=>{
         dispatch(deleteComment(postId,commentId));
         if (isAccount) {
-            console.log("Bring me my profile");
             dispatch(myAllPosts());
         } else {
             dispatch(postOfFollowing());

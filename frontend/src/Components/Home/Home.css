@@ -2,7 +2,7 @@
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 300px;
-  height: 100vh;
+  height: 93.8vh;
 }
 
 .homeleft {
@@ -13,9 +13,12 @@
   align-items: center;
   padding: 2vmax;
   box-sizing: border-box;
+  height: 100%;
 }
 
 .homeright {
+  height: 100%;
+  overflow-y: auto;
 }
 
 .homeUser {
